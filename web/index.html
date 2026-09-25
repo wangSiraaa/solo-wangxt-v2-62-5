@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>儿童椅资源预约与排座</title>
+  <link rel="stylesheet" href="/web/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>儿童椅资源预约与排座</h1>
+      <div id="projectMeta" class="muted">加载中…</div>
+    </div>
+    <div class="actions" id="globalActions">
+      <button data-action="sample-modern" class="secondary">载入现代示例</button>
+      <button data-action="sample-legacy" class="secondary">载入旧项目示例</button>
+      <button data-action="export-all" class="secondary">导出全项目</button>
+      <label class="button secondary">
+        导入备份 JSON
+        <input type="file" accept="application/json" hidden data-action="import-all-file" />
+      </label>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button data-tab="board" class="active">桌位可视化</button>
+    <button data-tab="resources">宾客与椅子资源</button>
+    <button data-tab="diagnose">自动排座诊断</button>
+    <button data-tab="history">历史记录</button>
+  </nav>
+
+  <main id="view"></main>
+
+  <dialog id="modal">
+    <form method="dialog" id="modalForm">
+      <h3 id="modalTitle">操作</h3>
+      <div id="modalBody"></div>
+      <div class="modal-foot">
+        <button value="cancel" class="secondary" formnovalidate>取消</button>
+        <button value="confirm" id="modalConfirm">确认</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script type="module" src="/web/app.js"></script>
+</body>
+</html>

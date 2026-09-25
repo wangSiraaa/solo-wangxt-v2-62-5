@@ -1,0 +1,14 @@
+{
+  "name": "tracked-child-chair-seating",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "可追踪儿童椅资源预约、排座与审计系统",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test test/"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
