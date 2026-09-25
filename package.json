@@ -1,0 +1,16 @@
+{
+  "name": "child-chair-seating",
+  "version": "1.0.0",
+  "description": "可追踪的儿童椅实体资源预约与排座系统（可用/已预留/已布置/已归还/故障/停用）",
+  "type": "commonjs",
+  "main": "src/cli.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test --test-reporter=spec",
+    "seed": "node src/cli.js seed"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "license": "MIT"
+}

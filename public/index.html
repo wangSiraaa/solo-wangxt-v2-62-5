@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>儿童椅实体资源预约 · 桌位管理</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>🪑 儿童椅实体资源预约系统</h1>
+    <div class="proj-bar">
+      <label>项目
+        <select id="projectSelect"></select>
+      </label>
+      <button id="refreshBtn" class="ghost">刷新</button>
+      <span id="invBadge" class="inv-badge" title="资源库存"></span>
+    </div>
+    <nav class="tabs">
+      <button data-tab="tables" class="tab active">桌位可视化</button>
+      <button data-tab="chairs" class="tab">椅子资源</button>
+      <button data-tab="autoseat" class="tab">自动排座诊断</button>
+      <button data-tab="issues" class="tab">待处理方案 <span id="issueCount" class="pill danger hidden">0</span></button>
+      <button data-tab="history" class="tab">历史审计</button>
+      <button data-tab="migrate" class="tab">迁移 / 导入</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- 桌位可视化 -->
+    <section id="tab-tables" class="tab-panel active">
+      <div id="tableView" class="tables-grid"></div>
+      <div id="tablesEmpty" class="empty hidden">当前项目还没有桌位。</div>
+    </section>
+
+    <!-- 椅子资源 -->
+    <section id="tab-chairs" class="tab-panel hidden">
+      <div class="toolbar">
+        <button id="addChairBtn">新增椅子</button>
+        <button id="importCsvBtn" class="ghost">CSV 批量导入</button>
+        <button id="exportCsvBtn" class="ghost">导出 CSV</button>
+      </div>
+      <table class="grid">
+        <thead><tr><th>编码</th><th>名称</th><th>状态</th><th>核验</th><th>绑定席位</th><th>操作</th></tr></thead>
+        <tbody id="chairRows"></tbody>
+      </table>
+    </section>
+
+    <!-- 自动排座 -->
+    <section id="tab-autoseat" class="tab-panel hidden">
+      <div class="toolbar">
+        <button id="diagnoseBtn">运行诊断（只读）</button>
+        <button id="autoSeatBtn">执行自动排座</button>
+        <label class="inline"><input type="checkbox" id="allowPartial" /> 允许部分成功</label>
+      </div>
+      <div id="diagResult"></div>
+    </section>
+
+    <!-- 待处理 -->
+    <section id="tab-issues" class="tab-panel hidden">
+      <div id="issueList" class="issue-list"></div>
+      <div id="issuesEmpty" class="empty hidden">没有待处理方案 🎉</div>
+    </section>
+
+    <!-- 历史 -->
+    <section id="tab-history" class="tab-panel hidden">
+      <div class="toolbar">
+        <select id="historyFilter">
+          <option value="">全部动作</option>
+          <option value="chair.reserve">预留</option>
+          <option value="chair.deploy">布置</option>
+          <option value="chair.release">释放</option>
+          <option value="seat.transfer">换座</option>
+          <option value="chair.fault">故障</option>
+          <option value="chair.withdraw">撤回</option>
+          <option value="issue.resolve">方案处理</option>
+          <option value="autoseat">自动排座</option>
+          <option value="migration.legacy-import">迁移</option>
+        </select>
+        <select id="historyResult">
+          <option value="">成功+失败</option>
+          <option value="failed">仅失败</option>
+          <option value="ok">仅成功</option>
+        </select>
+        <button id="historyRefresh" class="ghost">查询</button>
+      </div>
+      <table class="grid">
+        <thead><tr><th>时间</th><th>动作</th><th>结果</th><th>对象</th><th>操作人</th><th>详情</th></tr></thead>
+        <tbody id="historyRows"></tbody>
+      </table>
+    </section>
+
+    <!-- 迁移/导入 -->
+    <section id="tab-migrate" class="tab-panel hidden">
+      <h3>旧项目（v1 抽象占位）迁移</h3>
+      <p class="hint">粘贴旧项目 JSON：儿童宾客席与匿名儿童椅占位将各自绑定一把<strong>待核验</strong>实体椅，容量、锁定与桌卡标签原样保留。</p>
+      <textarea id="legacyJson" rows="10" placeholder='{"version":1,"project":{"id":"old-1","name":"旧年会"},"tables":[...],"guests":[...],"childPlaceholders":[...]}'></textarea>
+      <div class="toolbar"><button id="migrateBtn">执行迁移</button></div>
+      <pre id="migrateResult" class="result"></pre>
+
+      <h3>CSV 批量导入椅子</h3>
+      <p class="hint">表头：code,label,status,verification（仅允许导入 available 资源；其余状态由业务流转产生）</p>
+      <textarea id="csvText" rows="6">code,label,status,verification
+CH-1001,儿童椅 A,available,verified
+CH-1002,儿童椅 B,available,verified</textarea>
+      <div class="toolbar"><button id="csvImportBtn">导入到当前项目</button></div>
+    </section>
+  </main>
+
+  <!-- 席位操作弹层 -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-card">
+      <h3 id="modalTitle">操作</h3>
+      <div id="modalBody"></div>
+      <div class="modal-actions">
+        <button id="modalCancel" class="ghost">取消</button>
+        <button id="modalOk" class="primary">确认</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="/app.js"></script>
+</body>
+</html>
